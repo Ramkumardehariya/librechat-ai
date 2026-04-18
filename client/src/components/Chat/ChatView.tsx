@@ -21,9 +21,11 @@ import store from '~/store';
 
 function LoadingSpinner() {
   return (
-    <div className="relative flex-1 overflow-hidden overflow-y-auto">
+    <div className="relative flex-1 overflow-hidden overflow-y-auto bg-gray-50 dark:bg-gray-900">
       <div className="relative flex h-full items-center justify-center">
-        <Spinner className="text-text-primary" />
+        <div className="animate-fade-in-up">
+          <Spinner className="h-8 w-8 text-brand-purple" />
+        </div>
       </div>
     </div>
   );
@@ -81,22 +83,22 @@ function ChatView({ index = 0 }: { index?: number }) {
       <ChatContext.Provider value={chatHelpers}>
         <AddedChatContext.Provider value={addedChatHelpers}>
           <Presentation>
-            <div className="relative flex h-full w-full flex-col">
+            <div className="relative flex h-full w-full flex-col bg-white dark:bg-gray-900">
               {!isLoading && <Header />}
               <>
                 <div
                   className={cn(
                     'flex flex-col',
                     isLandingPage
-                      ? 'flex-1 items-center justify-end sm:justify-center'
+                      ? 'flex-1 items-center justify-end sm:justify-center px-4'
                       : 'h-full overflow-y-auto',
                   )}
                 >
                   {content}
                   <div
                     className={cn(
-                      'w-full',
-                      isLandingPage && 'max-w-3xl transition-all duration-200 xl:max-w-4xl',
+                      'w-full px-4 py-6',
+                      isLandingPage && 'max-w-3xl transition-all duration-300 xl:max-w-4xl mx-auto',
                     )}
                   >
                     <ChatForm index={index} />
