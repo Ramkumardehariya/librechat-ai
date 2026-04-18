@@ -39,8 +39,8 @@ export const NAV_WIDTH = {
 } as const;
 
 const SearchBarSkeleton = memo(() => (
-  <div className={cn('flex h-12 items-center py-3 px-2')}>
-    <Skeleton className="h-10 w-full rounded-xl border border-gray-200 dark:border-gray-700" />
+  <div className={cn('flex h-10 items-center py-2')}>
+    <Skeleton className="h-10 w-full rounded-lg" />
   </div>
 ));
 
@@ -52,7 +52,7 @@ const NavMask = memo(
       id="mobile-nav-mask-toggle"
       role="button"
       tabIndex={0}
-      className={`nav-mask fixed inset-0 z-[105] bg-black/20 backdrop-blur-sm transition-all duration-300 ease-out ${navVisible ? 'active opacity-100' : 'opacity-0 pointer-events-none'}`}
+      className={`nav-mask transition-opacity duration-200 ease-in-out ${navVisible ? 'active opacity-100' : 'opacity-0'}`}
       onClick={toggleNavVisible}
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') {
@@ -219,11 +219,11 @@ const Nav = memo(
 
     // Sidebar content (shared between mobile and desktop)
     const sidebarContent = (
-      <div className="flex h-full flex-col bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700">
+      <div className="flex h-full flex-col">
         <nav
           id="chat-history-nav"
           aria-label={localize('com_ui_chat_history')}
-          className="flex h-full flex-col px-3 py-4 space-y-4"
+          className="flex h-full flex-col px-2 pb-3.5"
           aria-hidden={!navVisible}
           {...{ inert: !navVisible ? '' : undefined }}
         >
@@ -234,7 +234,7 @@ const Nav = memo(
               headerButtons={headerButtons}
               isSmallScreen={isSmallScreen}
             />
-            <div className="flex min-h-0 flex-grow flex-col overflow-hidden mt-4">
+            <div className="flex min-h-0 flex-grow flex-col overflow-hidden">
               <Conversations
                 conversations={conversations}
                 moveToTop={moveToTop}
@@ -248,11 +248,9 @@ const Nav = memo(
               />
             </div>
           </div>
-          <div className="mt-auto pt-4 border-t border-gray-200 dark:border-gray-700">
-            <Suspense fallback={<Skeleton className="h-12 w-full rounded-xl" />}>
-              <AccountSettings />
-            </Suspense>
-          </div>
+          <Suspense fallback={<Skeleton className="mt-1 h-12 w-full rounded-xl" />}>
+            <AccountSettings />
+          </Suspense>
         </nav>
       </div>
     );
@@ -265,13 +263,13 @@ const Nav = memo(
           <div
             data-testid="nav"
             className={cn(
-              'nav fixed left-0 top-0 z-[110] h-full bg-white dark:bg-gray-900 shadow-2xl',
+              'nav fixed left-0 top-0 z-[110] h-full bg-surface-primary-alt',
               navVisible && 'active',
             )}
             style={{
               width: sidebarWidth,
               transform: navVisible ? 'translateX(0)' : `translateX(-${sidebarWidth}px)`,
-              transition: 'transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1)',
+              transition: 'transform 0.2s ease-out',
             }}
           >
             {sidebarContent}
@@ -284,18 +282,18 @@ const Nav = memo(
     // Desktop: Inline sidebar with width transition
     return (
       <div
-        className="flex-shrink-0 overflow-hidden border-r border-gray-200 dark:border-gray-700"
-        style={{ width: navVisible ? sidebarWidth : 0, transition: 'width 0.3s cubic-bezier(0.25, 0.1, 0.25, 1)' }}
+        className="flex-shrink-0 overflow-hidden"
+        style={{ width: navVisible ? sidebarWidth : 0, transition: 'width 0.2s ease-out' }}
       >
         <motion.div
           data-testid="nav"
-          className={cn('nav h-full bg-white dark:bg-gray-900', navVisible && 'active')}
+          className={cn('nav h-full bg-surface-primary-alt', navVisible && 'active')}
           style={{ width: sidebarWidth }}
           initial={false}
           animate={{
             x: navVisible ? 0 : -sidebarWidth,
           }}
-          transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+          transition={{ duration: 0.2, ease: 'easeOut' }}
         >
           {sidebarContent}
         </motion.div>
